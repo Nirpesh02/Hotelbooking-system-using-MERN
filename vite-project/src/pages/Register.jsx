@@ -13,6 +13,8 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 import { isValidEmail, isValidPhone } from "../utils/helpers";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
 export const Register = ({ onNavigate }) => {
   const { register, loginWithSocial } = useAuth();
@@ -174,7 +176,7 @@ return (
               <User className="absolute left-3 top-3 h-5 w-5 text-white/70" />
               <input
                 type="text"
-                placeholder="John Doe"
+                placeholder="Name"
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
                 disabled={loading}
@@ -209,8 +211,8 @@ return (
             <div className="relative">
               <Phone className="absolute left-3 top-3 h-5 w-5 text-white/70" />
               <input
-                type="tel"
-                placeholder="+977 9800000000"
+                type="number"
+                placeholder="+977 "
                 value={formData.phone}
                 onChange={(e) => handleChange("phone", e.target.value)}
                 disabled={loading}
@@ -302,25 +304,29 @@ return (
         </div>
 
         {/* Social Buttons */}
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            onClick={() => handleSocialLogin("google")}
-            disabled={loading}
-            className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-white text-gray-700 font-semibold hover:scale-105 transition shadow-md"
-          >
-            <Chrome className="h-5 w-5 text-red-500" />
-            <span>Google</span>
-          </button>
 
-          <button
-            disabled
-            className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-gray-300 text-gray-500 font-semibold cursor-not-allowed shadow-md"
-          >
-            <Facebook className="h-5 w-5" />
-            <span>Coming Soon</span>
-          </button>
-        </div>
+<div className="grid grid-cols-2 gap-4">
 
+  {/* Google */}
+  <button
+    onClick={() => handleSocialLogin("google")}
+    disabled={loading}
+    className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-white text-gray-700 font-semibold hover:scale-105 transition shadow-md"
+  >
+    <FcGoogle size={22} />
+    <span>Google</span>
+  </button>
+
+  {/* Facebook */}
+  <button
+    onClick={() => handleSocialLogin("facebook")}
+    disabled={loading}
+    className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-white text-gray-700 font-semibold hover:scale-105 transition shadow-md"
+  >
+    <FaFacebook size={22} className="text-blue-600" />
+    <span>Facebook</span>
+  </button>
+</div>
         {/* Login Link */}
         <div className="mt-8 text-center text-white/80">
           Already have an account?{" "}

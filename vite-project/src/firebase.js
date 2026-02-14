@@ -1,40 +1,20 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyBC7DKterLI5vF0zw3ZxztHpkZEjauGN14",
+  authDomain: "hotelbookingsystem-9d12a.firebaseapp.com",
+  projectId: "hotelbookingsystem-9d12a",
+  storageBucket: "hotelbookingsystem-9d12a.appspot.com",
+  messagingSenderId: "43748545316",
+  appId: "1:43748545316:web:81e6983b81652c0e7519b1",
 };
 
-// Check if Firebase config is properly set (not demo/placeholder values)
-const isFirebaseConfigured = firebaseConfig.apiKey &&
-  firebaseConfig.apiKey !== 'demo_api_key' &&
-  firebaseConfig.projectId &&
-  firebaseConfig.projectId !== 'demo-project';
+const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase only if properly configured
-let app = null;
-let auth = null;
-let googleProvider = null;
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
 
-if (isFirebaseConfigured) {
-  try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    googleProvider = new GoogleAuthProvider();
-    googleProvider.setCustomParameters({
-      prompt: 'select_account'
-    });
-  } catch (error) {
-    console.warn('Firebase initialization failed:', error);
-  }
-} else {
-  console.warn('Firebase not configured. Using mock authentication. Set up Firebase config in .env file for real authentication.');
-}
-
-export { auth, googleProvider };
-export default app;
+//  Force profile & email
+googleProvider.addScope("profile");
+googleProvider.addScope("email");

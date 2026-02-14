@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { isValidEmail } from "../utils/helpers";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+
 
 export const Login = ({ onNavigate }) => {
   const { login, loginWithSocial } = useAuth();
@@ -220,25 +223,21 @@ return (
           <div className="flex-grow border-t border-white/30" />
         </div>
 
-        {/* Social Login */}
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            onClick={() => handleSocialLogin("google")}
-            disabled={loading}
-            className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-white text-gray-700 font-semibold hover:scale-105 transition shadow-md"
-          >
-            <Chrome className="h-5 w-5 text-red-500" />
-            <span>Google</span>
-          </button>
+        {/* Social Login Buttons */}
+<div className="grid grid-cols-2 gap-4">
 
-          <button
-            disabled
-            className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-gray-300 text-gray-500 font-semibold cursor-not-allowed shadow-md"
-          >
-            <Facebook className="h-5 w-5" />
-            <span>Coming Soon</span>
-          </button>
-        </div>
+  {/* Google */}
+  <button
+    onClick={() => handleSocialLogin("google")}
+    disabled={loading}
+    className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-white text-gray-700 font-semibold hover:scale-105 transition shadow-md"
+  >
+    <FcGoogle size={22} />
+    <span>Google</span>
+  </button>
+
+  
+    </div>
 
         {/* Signup */}
         <div className="mt-8 text-center text-white/80">

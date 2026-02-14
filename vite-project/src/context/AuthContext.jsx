@@ -1,152 +1,107 @@
-/**
- * Authentication Context
- * Manages user authentication state across the application
- */
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, googleProvider } from '../firebase';
+import { auth, googleProvider } from "../firebase";
+
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
   createUserWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
-} from 'firebase/auth';
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+  // Start loading as true
   const [loading, setLoading] = useState(true);
 
-  // Check if Firebase is configured
-  const isFirebaseAvailable = auth && googleProvider;
+  // Firebase availability check
+  const isFirebaseAvailable = !!auth && !!googleProvider;
 
-  // Listen to authentication state changes
+  //  Auth listener
   useEffect(() => {
     if (!isFirebaseAvailable) {
-      setLoading(false);
+      // No Firebase → stop loading safely
+      setTimeout(() => setLoading(false), 0);
       return;
     }
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // User is signed in
         setUser({
-          id: firebaseUser.uid,
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
-          email: firebaseUser.email,
-          avatar: firebaseUser.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-          phone: firebaseUser.phoneNumber || null,
-        });
+  id: firebaseUser.uid,
+  name:
+    firebaseUser.displayName ||
+    firebaseUser.email?.split("@")[0],
+  email: firebaseUser.email,
+  avatar:
+    firebaseUser.photoURL ??
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+  phone: firebaseUser.phoneNumber ?? null,
+});
+
       } else {
-        // User is signed out
         setUser(null);
       }
+
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, [isFirebaseAvailable]);
 
-  // Email/Password login
+  //  Email Login
   const login = async (email, password) => {
-    if (!isFirebaseAvailable) {
-      // Fallback to mock authentication
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setUser({
-        id: 'user-123',
-        name: 'Guest User',
-        email: email,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-      });
-      return true;
-    }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      return true;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
+    await signInWithEmailAndPassword(auth, email, password);
+    return true;
   };
 
-  // Google login
-  const loginWithSocial = async (provider) => {    if (!isFirebaseAvailable) {
-      // Fallback to mock social authentication
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setUser({
-        id: 'user-social-123',
-        name: `${provider} User`,
-        email: `user@${provider.toLowerCase()}.com`,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-      });
-      return true;
-    }
-    if (provider !== 'google') {
-      throw new Error('Only Google authentication is supported');
-    }
+  //  Google Login
+ const loginWithSocial = async (provider) => {
+  if (provider !== "google") {
+    throw new Error("Provider not supported");
+  }
 
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      return true;
-    } catch (error) {
-      console.error('Google login error:', error);
-      throw error;
-    }
-  };
+  const result = await signInWithPopup(auth, googleProvider);
 
-  // Registration
-  const register = async (name, email, password, phone) => {
-    if (!isFirebaseAvailable) {
-      // Fallback to mock registration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setUser({
-        id: 'user-new-' + Date.now(),
-        name,
-        email,
-        phone,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-      });
-      return true;
-    }
+  // Update user profile if Google provides photo
+  await updateProfile(result.user, {
+    displayName: result.user.displayName,
+    photoURL: result.user.photoURL,  // 🔥 photoURL captured here
+  });
 
-    try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+  return result.user;
+};
 
-      // Update the user profile with display name
-      await result.user.updateProfile({
-        displayName: name,
-      });
-
-      return true;
-    } catch (error) {
-      console.error('Registration error:', error);
-      throw error;
-    }
-  };
-
-  // Logout function
-  const logout = async () => {
-    if (!isFirebaseAvailable) {
-      // Fallback to mock logout
-      setUser(null);
-      return;
-    }
-
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
-
-  // Update user profile
-  const updateProfile = (updates) => {
-    setUser((prevUser) =>
-      prevUser ? { ...prevUser, ...updates } : prevUser
+  //  Register
+  const register = async (name, email, password) => {
+    const result = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
     );
+
+    //  Correct way to update profile
+    await updateProfile(result.user, {
+      displayName: name,
+    });
+
+    return true;
+  };
+
+  //  Logout
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
   };
 
   return (
@@ -158,7 +113,6 @@ export const AuthProvider = ({ children }) => {
         loginWithSocial,
         register,
         logout,
-        updateProfile,
         isFirebaseAvailable,
       }}
     >
@@ -167,14 +121,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use auth context
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+// Custom Hook
+export const useAuth = () => useContext(AuthContext);
 
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-
-  return context;
-};
+  

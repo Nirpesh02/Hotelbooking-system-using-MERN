@@ -86,11 +86,12 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-white/80">
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-yellow-300" />
-                +977 1-4444444
+                +977 9816988657
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-yellow-300" />
                 info@nepalhotels.com
+                Nirpeshdhungel7@gmail.com
               </p>
             </div>
 

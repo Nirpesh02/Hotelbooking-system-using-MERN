@@ -74,26 +74,31 @@ export const UserProfile = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Profile Header */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 bg-linear-to-br from-primary to-accent rounded-full flex items-center justify-center">
-              {user.avatar ? (
-                <img 
-                  src={user.avatar} 
-                  alt={user.name}
-                  className="w-20 h-20 rounded-full object-cover"
-                />
-              ) : (
-                <span className="text-3xl text-white">{user.name.charAt(0)}</span>
-              )}
-            </div>
-            <div className="flex-1">
-              <h2 className="mb-1">{user.name}</h2>
-              <p className="text-gray-600">{user.email}</p>
-            </div>
-          </div>
-        </div>
+        
+       {/* Profile Header */}
+<div className="bg-white rounded-xl shadow-md p-6 mb-8">
+  <div className="flex items-center space-x-4">
+    <div className="w-20 h-20 rounded-full overflow-hidden bg-primary flex items-center justify-center">
+      {user.avatar ? (
+        <img
+          src={user.avatar}
+          alt={user.name}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <span className="text-3xl text-white">
+          {user.name.charAt(0)}
+        </span>
+      )}
+    </div>
+
+    <div className="flex-1">
+      <h2 className="mb-1">{user.name}</h2>
+      <p className="text-gray-600">{user.email}</p>
+    </div>
+  </div>
+</div>
+
 
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-md mb-8">
