@@ -24,7 +24,7 @@ function NewsLetter() {
     try {
       // Make POST request to backend
       const response = await fetch(
-        "https://hotelbooking-system-using-mern-3.onrender.com/api/subscribe",
+        "https://hotelbooking-system-using-mern.onrender.com/api/subscribe",
         {
           method: "POST",
           headers: {
