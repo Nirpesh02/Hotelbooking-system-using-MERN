@@ -1,21 +1,31 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors"); // Added for Frontend-Backend communication
+const cors = require("cors");
 const { connectDatabase } = require("./database/database");
 const subRoutes = require("./routes/subRoutes");
 
 const app = express();
+const PORT = process.env.PORT || 4000;
 
-app.use(cors()); // Allow React to call this API
+// Middleware
+app.use(cors());
 app.use(express.json());
-
-// Database connection
-connectDatabase();
 
 // Routes
 app.use("/api", subRoutes);
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Start Server AFTER DB connects
+const startServer = async () => {
+  try {
+    await connectDatabase();
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
+};
+
+startServer();

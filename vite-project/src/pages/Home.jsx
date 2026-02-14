@@ -11,7 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 function NewsLetter() {
   const [email, setEmail] = useState("");
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
+    // Validate email
     if (!email || !email.includes("@")) {
       toast.error("Please enter a valid email address.", {
         position: "bottom-right",
@@ -20,14 +21,42 @@ function NewsLetter() {
       return;
     }
 
-    
-    toast.success("Subscribed successfully!", {
-      position: "bottom-right",
-      autoClose: 3000,
-    });
+    try {
+      // Make POST request to backend
+      const response = await fetch(
+        "https://hotelbooking-system-using-mern-3.onrender.com/api/subscribe",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
 
-    setEmail("");
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Subscribed successfully!", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+        setEmail(""); // Clear input
+      } else {
+        toast.error(data.message || "Something went wrong", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      toast.error("Server error. Please try again later.", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      console.error("Subscription error:", error);
+    }
   };
+
 
   return (
     <section className="py-14 bg-gradient-to-b from-pink-100 via-pink-50 to-white">
