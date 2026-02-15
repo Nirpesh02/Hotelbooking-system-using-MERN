@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { connectDatabase } = require("./database/database");
 const subRoutes = require("./routes/subRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
+// const reviewRoutes = require("./routes/reviewRoutes");
 
 
 const app = express();
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api", subRoutes);
-app.use("/api", reviewRoutes);
+// app.use("/api", reviewRoutes);
 
 // Start Server AFTER DB connects
 const startServer = async () => {
