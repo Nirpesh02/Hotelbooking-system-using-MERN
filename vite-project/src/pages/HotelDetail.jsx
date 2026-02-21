@@ -13,7 +13,7 @@ import { hotels } from "../data/mockData";
 import { BookingForm } from "../components/BookingForm";
 import { ReviewCard } from "../components/ReviewCard";
 import { MapView } from "../components/MapView";
-import { PaymentModal } from "../components/PaymentModal";
+import  PaymentModal  from "../components/payment/PaymentModal";
 import { useBooking } from "../context/BookingContext";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 

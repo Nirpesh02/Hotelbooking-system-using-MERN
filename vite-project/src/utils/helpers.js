@@ -1,6 +1,4 @@
-/**
- * Utility helper functions for the application
- */
+
 
 // Format price in Nepali Rupees (NPR)
 export const formatPrice = (price) => {

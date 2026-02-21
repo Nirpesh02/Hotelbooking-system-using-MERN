@@ -32,7 +32,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
           >
             <MapPin className="h-8 w-8 text-pink-600 group-hover:scale-110 transition" />
             <span className="ml-2 text-xl font-extrabold text-pink-700">
-              Nepal Hotels
+              Hotels Nepal
             </span>
           </div>
 

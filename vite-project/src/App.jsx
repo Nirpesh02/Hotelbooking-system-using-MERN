@@ -11,6 +11,7 @@ import { AuthProvider } from './context/AuthContext';
 import { BookingProvider } from './context/BookingContext';
 import { WishlistProvider } from './context/WishlistContext';
 
+
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedHotelId, setSelectedHotelId] = useState('');
